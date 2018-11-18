@@ -52,14 +52,16 @@ public class AudioActivity extends AppCompatActivity {
     }
 
     private void startPlaying() {
-        mPlayer = new MediaPlayer() {
+        mPlayer = new MediaPlayer();
+        mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
-            public void setOnCompletionListener(OnCompletionListener listener) {
+            public void onCompletion(MediaPlayer mp) {
                 findViewById(R.id.fab_record).setOnClickListener(recordClickListener);
                 findViewById(R.id.fab_save).setOnClickListener(saveClickListener);
-                super.setOnCompletionListener(listener);
+                Toast.makeText(getApplicationContext(), "Audio has ended",
+                        Toast.LENGTH_LONG).show();
             }
-        };
+        });
         try {
             mPlayer.setDataSource(mFileName);
             mPlayer.prepare();
