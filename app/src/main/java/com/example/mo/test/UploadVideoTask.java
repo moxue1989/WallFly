@@ -18,12 +18,17 @@ public class UploadVideoTask extends AsyncTask<String, Integer, Long> {
             try {
                 FileUploader.UploadVideo(url);
                 new File(url).delete();
-                Toast.makeText(activity, "Video Uploaded", Toast.LENGTH_SHORT).show();
-                activity.updateAdapter();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return 1L;
+    }
+
+    @Override
+    protected void onPostExecute(Long aLong) {
+        super.onPostExecute(aLong);
+        Toast.makeText(activity, "Video Uploaded", Toast.LENGTH_SHORT).show();
+        activity.updateAdapter();
     }
 }

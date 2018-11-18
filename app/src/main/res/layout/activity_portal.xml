@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvWelcomeMsg"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Welcome to your portal"
-        android:background="@color/colorPrimaryDark"
-        android:textColor="@color/colorPrimary"
-        android:padding="10dp"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:visibility="visible"
+        android:src="@drawable/fly_wofont" />
 
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Now Loading..."
+        android:gravity="center"/>
 </LinearLayout>
