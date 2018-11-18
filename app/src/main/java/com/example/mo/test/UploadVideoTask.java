@@ -7,16 +7,18 @@ import java.io.File;
 
 public class UploadVideoTask extends AsyncTask<String, Integer, Long> {
     private MainActivity activity;
+    private String username;
 
-    public UploadVideoTask(MainActivity mainActivity) {
+    public UploadVideoTask(MainActivity mainActivity, String username) {
         activity = mainActivity;
+        this.username = username;
     }
 
     @Override
     protected Long doInBackground(String... strings) {
         for (String url : strings) {
             try {
-                FileUploader.UploadVideo(url);
+                FileUploader.UploadVideo(url, username);
                 new File(url).delete();
             } catch (Exception e) {
                 e.printStackTrace();
