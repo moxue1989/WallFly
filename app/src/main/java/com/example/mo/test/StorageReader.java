@@ -16,7 +16,7 @@ public class StorageReader extends StorageInteraction {
             for (ListBlobItem blobItem : getVideoContainer().listBlobs()) {
                 if (blobItem instanceof CloudBlockBlob) {
                     CloudBlockBlob retrievedBlob = (CloudBlockBlob) blobItem;
-                    fileList.add(retrievedBlob.getName().replace('-', '\n'));
+                    fileList.add(retrievedBlob.getName().replace('-', '\n').replace(".mp4", ""));
                 }
             }
         } catch (Exception e) {
@@ -31,7 +31,7 @@ public class StorageReader extends StorageInteraction {
             for (ListBlobItem blobItem : getAudioContainer().listBlobs()) {
                 if (blobItem instanceof CloudBlockBlob) {
                     CloudBlockBlob retrievedBlob = (CloudBlockBlob) blobItem;
-                    fileList.add(retrievedBlob.getName().replace('-', '\n'));
+                    fileList.add(retrievedBlob.getName().replace('-', '\n').replace(".mp3", ""));
                 }
             }
         } catch (Exception e) {
