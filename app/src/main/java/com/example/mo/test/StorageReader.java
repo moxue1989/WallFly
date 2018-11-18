@@ -25,4 +25,19 @@ public class StorageReader extends StorageInteraction {
         }
         return fileList;
     }
+    public static Iterable<String> getAudioFileList(Activity context) {
+        List<String> fileList = new ArrayList<>();
+        try {
+            for (ListBlobItem blobItem : getAudioContainer().listBlobs()) {
+                if (blobItem instanceof CloudBlockBlob) {
+                    CloudBlockBlob retrievedBlob = (CloudBlockBlob) blobItem;
+                    fileList.add(retrievedBlob.getName());
+                }
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, "There was a problem connecting to your account",
+                    Toast.LENGTH_SHORT).show();
+        }
+        return fileList;
+    }
 }

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +14,13 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AudioActivity extends AppCompatActivity {
 
@@ -23,13 +28,12 @@ public class AudioActivity extends AppCompatActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static String mFileName = null;
 
-    private AppCompatButton mRecordButton = null;
+    private boolean isRecording = false;
+    private boolean isPlaying = false;
+
     private MediaRecorder mRecorder = null;
 
-    private AppCompatButton mPlayButton = null;
     private MediaPlayer mPlayer = null;
-
-    private AppCompatButton mSaveButton = null;;
 
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
@@ -47,36 +51,39 @@ public class AudioActivity extends AppCompatActivity {
 
     }
 
-    private void onRecord(boolean start) {
-        if (start) {
-            startRecording();
-        } else {
-            stopRecording();
-        }
-    }
-
-    private void onPlay(boolean start) {
-        if (start) {
-            startPlaying();
-        } else {
-            stopPlaying();
-        }
-    }
-
     private void startPlaying() {
-        mPlayer = new MediaPlayer();
+        mPlayer = new MediaPlayer() {
+            @Override
+            public void setOnCompletionListener(OnCompletionListener listener) {
+                findViewById(R.id.fab_record).setOnClickListener(recordClickListener);
+                findViewById(R.id.fab_save).setOnClickListener(saveClickListener);
+                super.setOnCompletionListener(listener);
+            }
+        };
         try {
             mPlayer.setDataSource(mFileName);
             mPlayer.prepare();
             mPlayer.start();
+            Toast.makeText(getApplicationContext(), "Audio has begun",
+                    Toast.LENGTH_LONG).show();
+            isPlaying = true;
+            findViewById(R.id.fab_record).setOnClickListener(null);
+            findViewById(R.id.fab_save).setOnClickListener(null);
         } catch (IOException e) {
             Log.e(LOG_TAG, "prepare() failed");
+            Toast.makeText(getApplicationContext(), "There was a problem playing your audio",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
     private void stopPlaying() {
         mPlayer.release();
         mPlayer = null;
+        Toast.makeText(getApplicationContext(), "Audio has ended",
+                Toast.LENGTH_LONG).show();
+        isPlaying = false;
+        findViewById(R.id.fab_record).setOnClickListener(recordClickListener);
+        findViewById(R.id.fab_save).setOnClickListener(saveClickListener);
     }
 
     private void startRecording() {
@@ -85,119 +92,114 @@ public class AudioActivity extends AppCompatActivity {
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mRecorder.setOutputFile(mFileName);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
         try {
             mRecorder.prepare();
         } catch (IOException e) {
             Log.e(LOG_TAG, "prepare() failed");
         }
-
         mRecorder.start();
+        Toast.makeText(getApplicationContext(), "Recording has begun",
+                Toast.LENGTH_LONG).show();
+        isRecording = true;
+        findViewById(R.id.fab_play).setOnClickListener(null);
+        findViewById(R.id.fab_save).setOnClickListener(null);
     }
 
     private void stopRecording() {
         mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
-    }
-
-    class RecordButton extends AppCompatButton {
-        boolean mStartRecording = true;
-
-        OnClickListener clicker = new OnClickListener() {
-            public void onClick(View v) {
-                onRecord(mStartRecording);
-                if (mStartRecording) {
-                    setText("Stop recording");
-                } else {
-                    setText("Start recording");
-                }
-                mStartRecording = !mStartRecording;
-            }
-        };
-
-        public RecordButton(Context ctx) {
-            super(ctx);
-            setText("Start recording");
-            setOnClickListener(clicker);
-        }
-    }
-
-    class PlayButton extends AppCompatButton {
-        boolean mStartPlaying = true;
-
-        OnClickListener clicker = new OnClickListener() {
-            public void onClick(View v) {
-                onPlay(mStartPlaying);
-                if (mStartPlaying) {
-                    setText("Stop playing");
-                } else {
-                    setText("Start playing");
-                }
-                mStartPlaying = !mStartPlaying;
-            }
-        };
-
-        public PlayButton(Context ctx) {
-            super(ctx);
-            setText("Start playing");
-            setOnClickListener(clicker);
-        }
-    }
-
-    class SaveButton extends AppCompatButton {
-        OnClickListener clicker = new OnClickListener() {
-            public void onClick(View v) {
-               if(mFileName != null){
-                   try {
-                       new UploadAudioTask().execute(mFileName);
-                   } catch (Exception e) {
-                       e.printStackTrace();
-                   }
-               }
-            }
-        };
-
-        public SaveButton(Context ctx) {
-            super(ctx);
-            setText("Save Audio File");
-            setOnClickListener(clicker);
-        }
+        Toast.makeText(getApplicationContext(), "Recording has ended",
+                Toast.LENGTH_LONG).show();
+        isRecording = false;
+        findViewById(R.id.fab_play).setOnClickListener(playClickListener);
+        findViewById(R.id.fab_save).setOnClickListener(saveClickListener);
     }
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
+        setContentView(R.layout.activity_audio);
         // Record to the external cache directory for visibility
         mFileName = getExternalCacheDir().getAbsolutePath();
         mFileName += "/audioRecord.3gp";
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
-        LinearLayout ll = new LinearLayout(this);
-        mRecordButton = new RecordButton(this);
-        ll.addView(mRecordButton,
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        0));
-        mPlayButton = new PlayButton(this);
-        ll.addView(mPlayButton,
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        0));
-
-        mSaveButton = new SaveButton(this);
-        ll.addView(mSaveButton,
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        0));
-        setContentView(ll);
-
+        findViewById(R.id.fab_record).setOnClickListener(recordClickListener);
+        findViewById(R.id.fab_play).setOnClickListener(playClickListener);
+        findViewById(R.id.fab_save).setOnClickListener(saveClickListener);
+        findViewById(R.id.fab_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isPlaying) {
+                    stopPlaying();
+                }
+                if (isRecording) {
+                    stopRecording();
+                }
+                mFileName = null;
+                finish();
+            }
+        });
+        updateAdapter();
     }
+
+    public void updateAdapter() {
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                R.layout.listitem_file, (List) StorageReader.getAudioFileList(this));
+
+        ListView listView = findViewById(R.id.audio_file_list);
+        listView.setAdapter(adapter);
+    }
+
+    private View.OnClickListener saveClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mFileName != null) {
+                try {
+                    Toast.makeText(getApplicationContext(), "Your upload has begun",
+                            Toast.LENGTH_LONG).show();
+                    new UploadAudioTask(){
+                        @Override
+                        protected void onPostExecute(Long aLong) {
+                            super.onPostExecute(aLong);
+                            Toast.makeText(getApplicationContext(), "Your upload has finished",
+                                    Toast.LENGTH_LONG).show();
+                            updateAdapter();
+                        }
+                    }.execute(mFileName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+
+    private View.OnClickListener recordClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (!isRecording) {
+                startRecording();
+            } else {
+                stopRecording();
+            }
+        }
+    };
+
+    private View.OnClickListener playClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (!isPlaying) {
+                startPlaying();
+            } else {
+                stopPlaying();
+            }
+        }
+    };
 
     @Override
     public void onStop() {
