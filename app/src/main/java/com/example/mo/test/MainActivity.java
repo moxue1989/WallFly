@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -28,8 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         StrictMode.setThreadPolicy(policy);
 
-        FloatingActionButton fab = findViewById(R.id.fab2);
-        fab.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fab2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 dispatchTakeVideoIntent();
@@ -65,19 +65,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             Uri videoUri = intent.getData();
-            FloatingActionButton fab = findViewById(R.id.fab2);
             String realPathFromUri = getRealPathFromUri(this, videoUri);
 
             String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
             ActivityCompat.requestPermissions(this, permissions, 1);
 
-            Snackbar.make(fab, realPathFromUri, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            Toast.makeText(getApplicationContext(), "Your upload has begun: "+realPathFromUri,
+                    Toast.LENGTH_LONG).show();
             try {
                 new UploadVideoTask(this).execute(realPathFromUri);
             } catch (Exception e) {
-                Snackbar.make(fab, e.getMessage(), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Toast.makeText(getApplicationContext(), "There was a problem with your upload",
+                        Toast.LENGTH_LONG).show();
             }
         }
     }
