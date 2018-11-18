@@ -1,18 +1,25 @@
 package com.example.mo.test;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LoginActivity extends RegisterActivity {
-    private DbConnection dbHelper;
-    private SQLiteDatabase db;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+public class LoginActivity extends Activity {
+    private FirebaseAuth mAuth;
 
     private EditText _etUsername;
     private EditText _etPassword;
@@ -22,59 +29,47 @@ public class LoginActivity extends RegisterActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        dbHelper = new DbConnection(getApplicationContext());
-        db = dbHelper.getReadableDatabase();
+        _etUsername = findViewById(R.id._loginUsername);
+        _etPassword = findViewById(R.id._loginPassword);
 
-        _etUsername = (EditText) findViewById(R.id._loginUsername);
-        _etPassword = (EditText) findViewById(R.id._loginPassword);
+        _etUsername.setText("mo_xue1989@yahoo.ca");
+        _etPassword.setText("password");
 
-        TextView _registerLink = (TextView) findViewById(R.id._tvRegister);
-        _registerLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newRegisterIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivityForResult(newRegisterIntent, 1);
-            }
-        });
-
-        Button _loginBtn = (Button) findViewById(R.id._btnSignIn);
+        Button _loginBtn = findViewById(R.id._btnSignIn);
         _loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (hasValidCredentials()) {
-                    Intent i = new Intent(LoginActivity.this, TwoFactorActivity.class);
-                    i.putExtra("_username",_etUsername.getText().toString());
-                    _etPassword.setText("");
-                    _etUsername.setText("");
-                    startActivity(i);
+                if(_etUsername.getText().toString().isEmpty()||
+                        _etPassword.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(), "You must enter a username and password",
+                            Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                if (mAuth == null) {
+                    mAuth = FirebaseAuth.getInstance();
+                }
+                mAuth.signInWithEmailAndPassword(_etUsername.getText().toString(), _etPassword.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    Toast.makeText(getApplicationContext(), user.getEmail(),
+                                            Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(LoginActivity.this, MenuActivity.class);
+                                    i.putExtra("_username", _etUsername.getText().toString());
+                                    _etPassword.setText("");
+                                    _etUsername.setText("");
+                                    startActivity(i);
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Toast.makeText(getApplicationContext(), "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
             }
         });
-    }
-
-    private boolean hasValidCredentials() {
-        String SQL_SELECT_USERNAME = new StringBuilder("SELECT ")
-                .append(user_schema.columns.COLUMN_USERNAME)
-                .append(" FROM ")
-                .append(user_schema.columns.TABLE_NAME)
-                .append(" WHERE ")
-                .append(user_schema.columns.COLUMN_USERNAME)
-                .append("='")
-                .append(_etUsername.getText().toString())
-                .append("'")
-                .append(" AND ")
-                .append(user_schema.columns.COLUMN_PASSWORD_HASHED)
-                .append("='")
-                .append(_etPassword.getText().toString())
-                .append("'").toString();
-        Cursor resultSet = db.rawQuery(SQL_SELECT_USERNAME, null);
-        if (resultSet.getCount() == 0) {
-            resultSet.close();
-            Toast.makeText(getApplicationContext(), "Invalid credentials", Toast.LENGTH_LONG).show();
-            return false;
-        }
-        resultSet.close();
-        Toast.makeText(getApplicationContext(), "Proceed to two factor authentication", Toast.LENGTH_LONG).show();
-        return true;
     }
 }

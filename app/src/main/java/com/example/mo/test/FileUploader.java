@@ -1,38 +1,24 @@
 package com.example.mo.test;
 
-import com.microsoft.azure.storage.CloudStorageAccount;
-import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 
 import java.util.Calendar;
 
-public class FileUploader {
-    public static final String storageConnectionString = "DefaultEndpointsProtocol=https;" +
-            "AccountName=mogeneral;" +
-            "AccountKey=WfpQSA5fHzhezp0OCjjVnJjNytggrmaBv+BUjIX4+JH6c75kPflcQu0RTIMUTSPeBPmGEyubnaRPDHL8OOLoIw==;" +
-            "EndpointSuffix=core.windows.net";
-
-    private static CloudBlobContainer getContainer() throws Exception {
-        CloudStorageAccount storageAccount = CloudStorageAccount
-                .parse(storageConnectionString);
-        CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
-        return blobClient.getContainerReference("leftbeef");
-    }
-
+public class FileUploader extends StorageInteraction {
     public static String UploadImage(String fileUri) throws Exception {
         CloudBlobContainer container = getContainer();
         container.createIfNotExists();
-        String imageName = getFileName("Test");
+        String imageName = getFileName(FOLDER);
         CloudBlockBlob imageBlob = container.getBlockBlobReference(imageName);
         imageBlob.uploadFromFile(fileUri);
 
         return imageBlob.getUri().toString();
     }
 
-    private static String getFileName(String fileName){
+    private static String getFileName(String folder) {
         StringBuilder sb = new StringBuilder();
-        sb.append(fileName + "/");
+        sb.append(folder + "/");
         sb.append(Calendar.getInstance().getTime());
         sb.append(".mp4");
         return sb.toString();
