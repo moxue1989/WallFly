@@ -8,28 +8,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.microsoft.azure.storage.blob.ListBlobItem;
-
-import java.io.File;
-import java.security.Permissions;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +35,10 @@ public class MainActivity extends AppCompatActivity {
                 dispatchTakeVideoIntent();
             }
         });
+        updateAdapter();
+    }
 
+    public void updateAdapter() {
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
                 R.layout.listitem_file, (List) StorageReader.getFileList(this));
 
@@ -79,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             Snackbar.make(fab, realPathFromUri, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             try {
-                new UploadVideoTask().execute(realPathFromUri);
+                new UploadVideoTask(this).execute(realPathFromUri);
             } catch (Exception e) {
                 Snackbar.make(fab, e.getMessage(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
