@@ -37,7 +37,7 @@ public class TwoFactorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (hasValidCode()) {
-                    Intent i = new Intent(TwoFactorActivity.this, MainActivity.class);
+                    Intent i = new Intent(TwoFactorActivity.this, MenuActivity.class);
                     i.putExtra("_username", _username);
                     Toast.makeText(getApplicationContext(), "Welcome, " + _username, Toast.LENGTH_LONG).show();
                     startActivityForResult(i, 1);

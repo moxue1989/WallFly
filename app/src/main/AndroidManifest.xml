@@ -30,7 +30,6 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".TwoFactorActivity" />
-        <activity android:name=".InitActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".MenuActivity" />
         <activity
