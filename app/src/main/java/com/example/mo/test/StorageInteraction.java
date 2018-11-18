@@ -25,7 +25,7 @@ public abstract class StorageInteraction {
     @NonNull
     private static CloudBlobContainer getCloudBlobContainer(String containerName) throws URISyntaxException, InvalidKeyException, StorageException {
         CloudStorageAccount storageAccount = CloudStorageAccount
-                .parse(DbConnection.storageConnectionString);
+                .parse(StorageConnection.storageConnectionString);
         CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
         return blobClient.getContainerReference(containerName);
     }
