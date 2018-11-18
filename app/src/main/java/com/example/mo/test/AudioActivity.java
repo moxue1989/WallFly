@@ -37,6 +37,7 @@ public class AudioActivity extends AppCompatActivity {
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
     private String[] permissions = {Manifest.permission.RECORD_AUDIO};
+    private String username;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -77,7 +78,7 @@ public class AudioActivity extends AppCompatActivity {
             try {
                 Toast.makeText(getApplicationContext(), "Your upload has begun",
                         Toast.LENGTH_SHORT).show();
-                new UploadAudioTask(){
+                new UploadAudioTask(username){
                     @Override
                     protected void onPostExecute(Long aLong) {
                         super.onPostExecute(aLong);
@@ -96,6 +97,7 @@ public class AudioActivity extends AppCompatActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_audio);
+        username = getIntent().getStringExtra("_username");
         // Record to the external cache directory for visibility
         mFileName = getExternalCacheDir().getAbsolutePath();
         mFileName += "/audioRecord.3gp";

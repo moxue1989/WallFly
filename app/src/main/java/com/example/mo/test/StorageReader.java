@@ -16,7 +16,7 @@ public class StorageReader extends StorageInteraction {
             for (ListBlobItem blobItem : getVideoContainer().listBlobs()) {
                 if (blobItem instanceof CloudBlockBlob) {
                     CloudBlockBlob retrievedBlob = (CloudBlockBlob) blobItem;
-                    fileList.add(retrievedBlob.getName());
+                    fileList.add(retrievedBlob.getName().replace('-', '\n'));
                 }
             }
         } catch (Exception e) {

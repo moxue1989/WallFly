@@ -21,6 +21,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+        username = getIntent().getStringExtra("_username");
         updateAdapter();
     }
 
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Your upload has begun: "+realPathFromUri,
                     Toast.LENGTH_LONG).show();
             try {
-                new UploadVideoTask(this).execute(realPathFromUri);
+                new UploadVideoTask(this, username).execute(realPathFromUri);
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "There was a problem with your upload",
                         Toast.LENGTH_LONG).show();
