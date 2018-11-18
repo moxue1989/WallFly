@@ -25,6 +25,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
 import java.security.Permissions;
 
 public class MainActivity extends AppCompatActivity {
@@ -85,13 +86,18 @@ public class MainActivity extends AppCompatActivity {
             FloatingActionButton fab = findViewById(R.id.fab2);
             String realPathFromUri = getRealPathFromUri(this, videoUri);
 
-            String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
             ActivityCompat.requestPermissions(this, permissions, 1);
 
             Snackbar.make(fab, realPathFromUri, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             try {
                 String imageUrl = FileUploader.UploadImage(realPathFromUri);
+
+                String[] permissions2 = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                ActivityCompat.requestPermissions(this, permissions2, 1);
+                int delete1 = MainActivity.this.getContentResolver()
+                        .delete(videoUri, null, null);
                 Snackbar.make(fab, "Uploaded: " + imageUrl, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             } catch (Exception e){

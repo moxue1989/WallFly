@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "253475081750",
+    "firebase_url": "https://left-beef.firebaseio.com",
+    "project_id": "left-beef",
+    "storage_bucket": "left-beef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253475081750:android:f8a1c8d7a2247d6f",
+        "android_client_info": {
+          "package_name": "left.beef"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "253475081750-megffdbbum4tq7egr390u8f3mv5jl52k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBux6THdc0jQXhjIFAc5zR2tL354he0WhI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

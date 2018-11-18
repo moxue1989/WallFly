@@ -8,7 +8,10 @@ import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import java.util.Calendar;
 
 public class FileUploader {
-    public static final String storageConnectionString = "gsgs";
+    public static final String storageConnectionString = "DefaultEndpointsProtocol=https;" +
+            "AccountName=mogeneral;" +
+            "AccountKey=WfpQSA5fHzhezp0OCjjVnJjNytggrmaBv+BUjIX4+JH6c75kPflcQu0RTIMUTSPeBPmGEyubnaRPDHL8OOLoIw==;" +
+            "EndpointSuffix=core.windows.net";
 
     private static CloudBlobContainer getContainer() throws Exception {
         CloudStorageAccount storageAccount = CloudStorageAccount
