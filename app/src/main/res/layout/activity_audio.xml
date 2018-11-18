@@ -10,19 +10,28 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <ImageButton
         android:id="@+id/fab_record"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:padding="0dp"
+        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_btn_speak_now" />
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        app:backgroundTint="@android:color/transparent"
+        app:srcCompat="@drawable/audio_selector" />
 
-    <android.support.design.widget.FloatingActionButton
+    <ImageButton
         android:id="@+id/fab_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:padding="0dp"
         android:layout_gravity="bottom|start"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_media_rew" />
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        app:backgroundTint="@android:color/transparent"
+        app:srcCompat="@drawable/back_blue_selector" />
+
 </android.support.design.widget.CoordinatorLayout>
