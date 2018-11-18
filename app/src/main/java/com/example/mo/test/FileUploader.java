@@ -34,6 +34,7 @@ public class FileUploader {
         StringBuilder sb = new StringBuilder();
         sb.append(fileName + "/");
         sb.append(Calendar.getInstance().getTime());
+        sb.append(".mp4");
         return sb.toString();
     }
 }

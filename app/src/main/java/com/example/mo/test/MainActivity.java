@@ -25,6 +25,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
 import java.security.Permissions;
 
 public class MainActivity extends AppCompatActivity {
@@ -91,10 +92,8 @@ public class MainActivity extends AppCompatActivity {
             Snackbar.make(fab, realPathFromUri, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             try {
-                String imageUrl = FileUploader.UploadImage(realPathFromUri);
-                Snackbar.make(fab, "Uploaded: " + imageUrl, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            } catch (Exception e){
+                new UploadFileTask().execute(realPathFromUri);
+            } catch (Exception e) {
                 Snackbar.make(fab, e.getMessage(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -104,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     public static String getRealPathFromUri(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
+            String[] proj = {MediaStore.Images.Media.DATA};
             cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
