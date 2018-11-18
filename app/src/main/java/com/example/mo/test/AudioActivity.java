@@ -58,6 +58,8 @@ public class AudioActivity extends AppCompatActivity {
             public void onCompletion(MediaPlayer mp) {
                 findViewById(R.id.fab_record).setOnClickListener(recordClickListener);
                 findViewById(R.id.fab_save).setOnClickListener(saveClickListener);
+                findViewById(R.id.fab_play).setOnClickListener(playClickListener);
+                isPlaying=false;
                 Toast.makeText(getApplicationContext(), "Audio has ended",
                         Toast.LENGTH_LONG).show();
             }
