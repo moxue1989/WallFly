@@ -44,6 +44,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="backgroundImage" value="C:\Users\CSUS exec\Desktop\logo.png" />
                                       <entry key="foregroundImage" value="C:\Users\CSUS exec\Desktop\logo.png" />
                                       <entry key="outputName" value="logo_launcher" />
                                     </map>

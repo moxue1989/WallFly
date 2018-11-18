@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,7 @@ public class LoginActivity extends Activity {
         _etUsername.setText("mo_xue1989@yahoo.ca");
         _etPassword.setText("password");
 
-        Button _loginBtn = findViewById(R.id._btnSignIn);
+        ImageButton _loginBtn = findViewById(R.id._btnSignIn);
         _loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
