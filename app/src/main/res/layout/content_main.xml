@@ -7,12 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
+
         <ListView
             android:id="@+id/file_list"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="@android:dimen/app_icon_size"
-            android:drawSelectorOnTop="false"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="96dp"
+            android:drawSelectorOnTop="false" />
     </LinearLayout>
 </ScrollView>
