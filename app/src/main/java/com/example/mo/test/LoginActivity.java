@@ -49,7 +49,7 @@ public class LoginActivity extends Activity {
                 if (mAuth == null) {
                     mAuth = FirebaseAuth.getInstance();
                 }
-                mAuth.signInWithEmailAndPassword(_etUsername.getText().toString(), _etPassword.getText().toString())
+                mAuth.signInWithEmailAndPassword(_etUsername.getText().toString().trim(), _etPassword.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
