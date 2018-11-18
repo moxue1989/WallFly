@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Test</string>
+    <string name="app_name">Wall Fly</string>
     <string name="action_settings">Settings</string>
     <string name="version">v0.1</string>
     <string name="title_activity_navigation_drawer_fragment">NavigationDrawerFragment</string>

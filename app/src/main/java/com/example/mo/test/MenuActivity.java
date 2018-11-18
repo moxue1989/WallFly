@@ -19,8 +19,8 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void gotoAudioDiary(View view){
-        //Intent audioDiary = new Intent(this, AudioDiaryActivity.class);
-        //startActivity(audioDiary.class);
+        Intent audioActivity = new Intent(this, AudioActivity.class);
+        startActivity(audioActivity);
     }
 
     public void gotoSettings(View view){
@@ -29,7 +29,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void quitApp(View view){
-        finish();
+        finishAffinity();
         System.exit(0);
     }
 }
