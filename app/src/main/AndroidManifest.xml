@@ -32,6 +32,7 @@
         <activity android:name=".TwoFactorActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".MenuActivity" />
+        <activity android:name=".AudioActivity" />
         <activity
             android:name=".NavigationDrawerFragment"
             android:label="@string/title_activity_navigation_drawer_fragment"
@@ -42,6 +43,7 @@
     <uses-permission android:name="android.permission." />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature
         android:name="android.hardware.camera"
