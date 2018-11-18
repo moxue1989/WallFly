@@ -29,7 +29,6 @@ public class AudioActivity extends AppCompatActivity {
     private static String mFileName = null;
 
     private boolean isRecording = false;
-    private boolean isPlaying = false;
 
     private MediaRecorder mRecorder = null;
 
@@ -48,46 +47,6 @@ public class AudioActivity extends AppCompatActivity {
                 break;
         }
         if (!permissionToRecordAccepted) finish();
-
-    }
-
-    private void startPlaying() {
-        mPlayer = new MediaPlayer();
-        mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                findViewById(R.id.fab_record).setOnClickListener(recordClickListener);
-                findViewById(R.id.fab_save).setOnClickListener(saveClickListener);
-                findViewById(R.id.fab_play).setOnClickListener(playClickListener);
-                isPlaying=false;
-                Toast.makeText(getApplicationContext(), "Audio has ended",
-                        Toast.LENGTH_LONG).show();
-            }
-        });
-        try {
-            mPlayer.setDataSource(mFileName);
-            mPlayer.prepare();
-            mPlayer.start();
-            Toast.makeText(getApplicationContext(), "Audio has begun",
-                    Toast.LENGTH_LONG).show();
-            isPlaying = true;
-            findViewById(R.id.fab_record).setOnClickListener(null);
-            findViewById(R.id.fab_save).setOnClickListener(null);
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
-            Toast.makeText(getApplicationContext(), "There was a problem playing your audio",
-                    Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void stopPlaying() {
-        mPlayer.release();
-        mPlayer = null;
-        Toast.makeText(getApplicationContext(), "Audio has ended",
-                Toast.LENGTH_LONG).show();
-        isPlaying = false;
-        findViewById(R.id.fab_record).setOnClickListener(recordClickListener);
-        findViewById(R.id.fab_save).setOnClickListener(saveClickListener);
     }
 
     private void startRecording() {
@@ -103,10 +62,8 @@ public class AudioActivity extends AppCompatActivity {
         }
         mRecorder.start();
         Toast.makeText(getApplicationContext(), "Recording has begun",
-                Toast.LENGTH_LONG).show();
+                Toast.LENGTH_SHORT).show();
         isRecording = true;
-        findViewById(R.id.fab_play).setOnClickListener(null);
-        findViewById(R.id.fab_save).setOnClickListener(null);
     }
 
     private void stopRecording() {
@@ -114,10 +71,25 @@ public class AudioActivity extends AppCompatActivity {
         mRecorder.release();
         mRecorder = null;
         Toast.makeText(getApplicationContext(), "Recording has ended",
-                Toast.LENGTH_LONG).show();
+                Toast.LENGTH_SHORT).show();
         isRecording = false;
-        findViewById(R.id.fab_play).setOnClickListener(playClickListener);
-        findViewById(R.id.fab_save).setOnClickListener(saveClickListener);
+        if (mFileName != null) {
+            try {
+                Toast.makeText(getApplicationContext(), "Your upload has begun",
+                        Toast.LENGTH_SHORT).show();
+                new UploadAudioTask(){
+                    @Override
+                    protected void onPostExecute(Long aLong) {
+                        super.onPostExecute(aLong);
+                        Toast.makeText(getApplicationContext(), "Audio uploaded and deleted off your device",
+                                Toast.LENGTH_SHORT).show();
+                        updateAdapter();
+                    }
+                }.execute(mFileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -134,14 +106,9 @@ public class AudioActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
         findViewById(R.id.fab_record).setOnClickListener(recordClickListener);
-        findViewById(R.id.fab_play).setOnClickListener(playClickListener);
-        findViewById(R.id.fab_save).setOnClickListener(saveClickListener);
         findViewById(R.id.fab_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isPlaying) {
-                    stopPlaying();
-                }
                 if (isRecording) {
                     stopRecording();
                 }
@@ -160,29 +127,6 @@ public class AudioActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
-    private View.OnClickListener saveClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (mFileName != null) {
-                try {
-                    Toast.makeText(getApplicationContext(), "Your upload has begun",
-                            Toast.LENGTH_LONG).show();
-                    new UploadAudioTask(){
-                        @Override
-                        protected void onPostExecute(Long aLong) {
-                            super.onPostExecute(aLong);
-                            Toast.makeText(getApplicationContext(), "Your upload has finished",
-                                    Toast.LENGTH_LONG).show();
-                            updateAdapter();
-                        }
-                    }.execute(mFileName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
-
     private View.OnClickListener recordClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -190,17 +134,6 @@ public class AudioActivity extends AppCompatActivity {
                 startRecording();
             } else {
                 stopRecording();
-            }
-        }
-    };
-
-    private View.OnClickListener playClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (!isPlaying) {
-                startPlaying();
-            } else {
-                stopPlaying();
             }
         }
     };

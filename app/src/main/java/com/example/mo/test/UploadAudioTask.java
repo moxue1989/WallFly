@@ -1,13 +1,10 @@
 package com.example.mo.test;
 
-import android.app.Activity;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import java.io.File;
 
 public class UploadAudioTask extends AsyncTask<String, Integer, Long> {
-
 
     @Override
     protected Long doInBackground(String... strings) {

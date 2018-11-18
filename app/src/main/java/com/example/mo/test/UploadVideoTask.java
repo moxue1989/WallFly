@@ -28,7 +28,7 @@ public class UploadVideoTask extends AsyncTask<String, Integer, Long> {
     @Override
     protected void onPostExecute(Long aLong) {
         super.onPostExecute(aLong);
-        Toast.makeText(activity, "Video Uploaded", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "Video Uploaded and deleted off your device", Toast.LENGTH_SHORT).show();
         activity.updateAdapter();
     }
 }

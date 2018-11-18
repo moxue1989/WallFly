@@ -17,20 +17,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_btn_speak_now" />
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_media_play" />
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="96dp"
-        app:srcCompat="@android:drawable/ic_menu_upload" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_back"
         android:layout_width="wrap_content"
