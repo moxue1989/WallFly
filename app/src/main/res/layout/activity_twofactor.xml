@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/go"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center_horizontal"
+        android:text="This is where we would implement two factor authentication. For now, please enter this randomly generated code:"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/_tvCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="1234"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30dp" />
+
+    <EditText
+        android:id="@+id/_etVerifyCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:hint="Confirm code"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimary" />
+
+    <Button
+        android:id="@+id/_btnContinue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/go" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="continue"
+        android:textColor="@color/colorPrimary" />
+
+    <RelativeLayout
+        android:id="@+id/rlMain"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+
+        <TextView
+            android:id="@+id/_tvCancelTwoFactor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="16dp"
+            android:paddingRight="16dp"
+            android:text="Cancel"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorPrimary" />
+
+    </RelativeLayout>
+
+</LinearLayout>
