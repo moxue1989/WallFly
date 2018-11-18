@@ -35,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
                 dispatchTakeVideoIntent();
             }
         });
+        findViewById(R.id.fab_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         updateAdapter();
     }
 
