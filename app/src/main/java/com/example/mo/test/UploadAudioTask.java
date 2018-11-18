@@ -4,12 +4,12 @@ import android.os.AsyncTask;
 
 import java.io.File;
 
-public class UploadFileTask extends AsyncTask<String, Integer, Long> {
+public class UploadAudioTask extends AsyncTask<String, Integer, Long> {
     @Override
     protected Long doInBackground(String... strings) {
         for (String url : strings) {
             try {
-                FileUploader.UploadImage(url);
+                FileUploader.UploadAudio(url);
                 new File(url).delete();
             } catch (Exception e) {
                 e.printStackTrace();

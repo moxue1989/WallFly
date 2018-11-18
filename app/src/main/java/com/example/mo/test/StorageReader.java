@@ -13,7 +13,7 @@ public class StorageReader extends StorageInteraction {
     public static Iterable<String> getFileList(Activity context) {
         List<String> fileList = new ArrayList<>();
         try {
-            for (ListBlobItem blobItem : getFolder().listBlobs()) {
+            for (ListBlobItem blobItem : getVideoContainer().listBlobs()) {
                 if (blobItem instanceof CloudBlockBlob) {
                     CloudBlockBlob retrievedBlob = (CloudBlockBlob) blobItem;
                     fileList.add(retrievedBlob.getName());

@@ -6,21 +6,35 @@ import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import java.util.Calendar;
 
 public class FileUploader extends StorageInteraction {
-    public static String UploadImage(String fileUri) throws Exception {
-        CloudBlobContainer container = getContainer();
-        container.createIfNotExists();
-        String imageName = getFileName(FOLDER);
-        CloudBlockBlob imageBlob = container.getBlockBlobReference(imageName);
-        imageBlob.uploadFromFile(fileUri);
+    public static final String storageConnectionString = "DefaultEndpointsProtocol=https;" +
+            "AccountName=mogeneral;" +
+            "AccountKey=WfpQSA5fHzhezp0OCjjVnJjNytggrmaBv+BUjIX4+JH6c75kPflcQu0RTIMUTSPeBPmGEyubnaRPDHL8OOLoIw==;" +
+            "EndpointSuffix=core.windows.net";
 
-        return imageBlob.getUri().toString();
+    public static String UploadVideo(String fileUri) throws Exception {
+        return Upload(fileUri, getVideoFileName(), getVideoContainer());
     }
 
-    private static String getFileName(String folder) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(folder + "/");
-        sb.append(Calendar.getInstance().getTime());
-        sb.append(".mp4");
-        return sb.toString();
+    public static String UploadAudio(String fileUri) throws Exception {
+        return Upload(fileUri, getAudioFileName(), getAudioContainer());
+    }
+
+    private static String Upload(String fileUri, String fileName, CloudBlobContainer container) throws Exception {
+        container.createIfNotExists();
+        CloudBlockBlob fileBlob = container.getBlockBlobReference(fileName);
+        fileBlob.uploadFromFile(fileUri);
+        return fileBlob.getUri().toString();
+    }
+
+    private static String getVideoFileName() {
+        return getFileName().concat(".mp4");
+    }
+
+    private static String getAudioFileName() {
+        return getFileName().concat(".mp3");
+    }
+
+    private static String getFileName() {
+        return String.valueOf(Calendar.getInstance().getTime());
     }
 }
