@@ -150,7 +150,7 @@ public class AudioActivity extends AppCompatActivity {
             public void onClick(View v) {
                if(mFileName != null){
                    try {
-                       new UploadFileTask().execute(mFileName);
+                       new UploadAudioTask().execute(mFileName);
                    } catch (Exception e) {
                        e.printStackTrace();
                    }

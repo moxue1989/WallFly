@@ -13,28 +13,37 @@ public class FileUploader {
             "AccountKey=WfpQSA5fHzhezp0OCjjVnJjNytggrmaBv+BUjIX4+JH6c75kPflcQu0RTIMUTSPeBPmGEyubnaRPDHL8OOLoIw==;" +
             "EndpointSuffix=core.windows.net";
 
-    private static CloudBlobContainer getContainer() throws Exception {
+    private static CloudBlobContainer getContainer(String containerName) throws Exception {
         CloudStorageAccount storageAccount = CloudStorageAccount
                 .parse(storageConnectionString);
         CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
-        return blobClient.getContainerReference("leftbeef");
+        return blobClient.getContainerReference(containerName);
     }
 
-    public static String UploadImage(String fileUri) throws Exception {
-        CloudBlobContainer container = getContainer();
+    public static String UploadVideo(String fileUri) throws Exception {
+        return Upload(fileUri, getVideoFileName(), getContainer("video"));
+    }
+
+    private static String Upload(String fileUri, String fileName, CloudBlobContainer container) throws Exception {
         container.createIfNotExists();
-        String imageName = getFileName("Test");
-        CloudBlockBlob imageBlob = container.getBlockBlobReference(imageName);
-        imageBlob.uploadFromFile(fileUri);
-
-        return imageBlob.getUri().toString();
+        CloudBlockBlob fileBlob = container.getBlockBlobReference(fileName);
+        fileBlob.uploadFromFile(fileUri);
+        return fileBlob.getUri().toString();
     }
 
-    private static String getFileName(String fileName){
-        StringBuilder sb = new StringBuilder();
-        sb.append(fileName + "/");
-        sb.append(Calendar.getInstance().getTime());
-        sb.append(".mp4");
-        return sb.toString();
+    public static String UploadAudio(String fileUri) throws Exception {
+        return Upload(fileUri, getAudioFileName(), getContainer("audio"));
+    }
+
+    private static String getVideoFileName() {
+        return getFileName().concat(".mp4");
+    }
+
+    private static String getAudioFileName() {
+        return getFileName().concat(".mp3");
+    }
+
+    private static String getFileName() {
+        return String.valueOf(Calendar.getInstance().getTime());
     }
 }
