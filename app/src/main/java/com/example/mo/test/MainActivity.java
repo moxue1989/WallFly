@@ -54,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.fab_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
                 R.layout.listitem_file, (List) StorageReader.getFileList(this));
 
